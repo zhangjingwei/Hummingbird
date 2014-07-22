@@ -1,0 +1,110 @@
+<script type="text/javascript" src="../js/jquery-1.11.1.js"></script>
+<textarea id="t1" style="height:100px;width:920px;"></textarea>
+<textarea id="t2" style="height:100px;width:920px;"></textarea>
+<textarea id="t3" style="height:100px;width:920px;"></textarea>
+<textarea id="t4" style="height:100px;width:920px;"></textarea>
+<textarea id="t5" style="height:100px;width:920px;"></textarea>
+	<script type="text/javascript">
+		var a1 = {
+			'a':1,
+			'b':2
+		}
+
+		var a2 = [1,2,3,4];
+
+		var a3 = 'hello';
+
+		var a4 = 1+1;
+
+		var a5 = {
+			'a':[1,{
+				'a':1
+			},[1,2,3,{
+				'a':1
+			}],4],
+			'b':2,
+			'c': function(){
+				alert(1);
+			},
+			'd': new test()
+		};
+
+		function test(){
+			alert(2);
+		}
+
+
+
+		function DebugTools(){
+			this.debugstats = true;
+			this.tool = {
+				_typeof: function(target){
+					return target.constructor;
+				},
+			}
+		}
+
+		DebugTools.prototype = {
+		    log: function(target) {
+		    	var res;
+		    	switch(this.tool._typeof(target)){
+		    		case Object:
+		    		res = print_r(target);
+		    		break;
+		    		case Array:
+		    		res = print_r(target);
+		    		break;
+		    		case String:
+		    		res = target.toString();
+		    		break;
+		    		case Number:
+		    		res = target;
+		    		break;
+		    		case Boolean:
+		    		break;
+		    	}
+
+		    	return res;
+		    }
+		};
+
+		var debug = new DebugTools()
+
+		$("#t1").val(debug.log(a1));
+		$("#t2").val(debug.log(a2));
+		$("#t3").val(debug.log(a3));
+		$("#t4").val(debug.log(a4));
+		$("#t5").val(debug.log(t111()));
+
+		function t111(){
+			return 123;
+		}
+
+		console.log(t111())
+
+		console.log(a5);
+
+		function print_r( theObj, dep ) {
+			var retStr = '', rn = "\r\n";
+			if(typeof dep == 'undefined') {
+			 dep = 0;
+			}
+			var blank = function (num) {
+				for(var i=0, str = ''; i < num; i++) str += ' ';
+				return str;
+			};
+			if( typeof theObj == 'object') {
+				var cbox = theObj.constructor == Array ? ['[', ']'] : ['{', '}'];
+				retStr += (theObj.constructor == Array ? 'array' : typeof theObj) + cbox[0] + rn;
+				for (var p in theObj) {
+				    retStr += blank( (dep + 1) * 4 ) + p + ' => ';
+				    retStr += typeof theObj[p] == 'object' ? print_r( theObj[p], true, dep + 1 ) : theObj[p];
+				    retStr += rn;
+				}
+				retStr += blank( dep * 4 ) + cbox[1] + rn;
+			}else {
+				retStr += typeof theObj + ':' + theObj + rn;
+			}
+			return retStr;
+		}
+	</script>
