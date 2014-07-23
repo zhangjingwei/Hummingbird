@@ -8,17 +8,16 @@
   <link rel="stylesheet" href="style/animate.css" type="text/css"></link>
   <link rel="stylesheet" href="style/main.css" type="text/css"></link>
 
-
-<link rel="stylesheet" href="lib/codemirror.css">
-<link rel="stylesheet" href="theme/erlang-dark.css">
-<script src="lib/codemirror.js"></script>
-<script src="mode/xml/xml.js"></script>
-<script src="mode/javascript/javascript.js"></script>
-<script src="mode/css/css.js"></script>
-<script src="mode/vbscript/vbscript.js"></script>
-<script src="mode/htmlmixed/htmlmixed.js"></script>
-<script src="addon/selection/active-line.js"></script>
-<script src="addon/edit/matchbrackets.js"></script>
+	<link rel="stylesheet" href="lib/codemirror.css">
+	<link rel="stylesheet" href="theme/erlang-dark.css">
+	<script src="lib/codemirror.js"></script>
+	<script src="mode/xml/xml.js"></script>
+	<script src="mode/javascript/javascript.js"></script>
+	<script src="mode/css/css.js"></script>
+	<script src="mode/vbscript/vbscript.js"></script>
+	<script src="mode/htmlmixed/htmlmixed.js"></script>
+	<script src="addon/selection/active-line.js"></script>
+	<script src="addon/edit/matchbrackets.js"></script>
 </head>
 <body>
 	<div id="header">
@@ -33,27 +32,20 @@
 		</ul>
 	</div>
 	<div id="main">
-		<textarea id="codeedit_01">
-<script type="text/javascript">
-	function test(){
-		alert('ok')
-	}
-</script>
-
-<div></div>
-
-<p>你好，感觉今天天气不错<p>
-		
-		</textarea>
+		<textarea id="codeedit_01"></textarea>
+		<div class="frwrap">
+			<button class="pure-button pure-button-primary" id="creatnew">新建</button>
+			<button class="pure-button pure-button-primary">同步</button>
+		</div>
 		<script>
 			var mixedMode = {
-			    name: "htmlmixed",
-			    scriptTypes: [{matches: /\/x-handlebars-template|\/x-mustache/i,
-			                   mode: null},
-			                  {matches: /(text|application)\/(x-)?vb(a|script)/i,
-			                   mode: "vbscript"}]
+		    name: "htmlmixed",
+		    scriptTypes: [{matches: /\/x-handlebars-template|\/x-mustache/i,
+		                   mode: null},
+		                   {matches: /(text|application)\/(x-)?vb(a|script)/i,
+		                   mode: "vbscript"}]
 			};
-			var editor = CodeMirror.fromTextArea(document.getElementById("codeedit_01"), {
+			var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("codeedit_01"), {
 				lineNumbers: true,
 				mode: mixedMode,
 				indentUnit: 4,
@@ -62,6 +54,12 @@
 				matchBrackets: true,
 				styleActiveLine: true
 			});
+
+			myCodeMirror.setSize('auto', $(window).height()-80-$(".frwrap").outerHeight());
+
+			$("#creatnew").on('click',function(){
+				console.log(1);
+			})
 		</script>
 	</div>
 	<div id="footer">
