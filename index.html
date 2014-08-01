@@ -4,6 +4,8 @@
   <title>啄木鸟-移动端网页调试工具</title>
   <meta charset='utf-8'>
   <script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+  <script type="text/javascript" src="js/prettify.js"></script>
+  <script type="text/javascript" src="js/remote.js"></script>
   <link rel="stylesheet" href="style/base.css" type="text/css"></link>
   <link rel="stylesheet" href="style/animate.css" type="text/css"></link>
   <link rel="stylesheet" href="style/main.css" type="text/css"></link>
@@ -33,6 +35,10 @@
 	</div>
 	<div id="main">
 		<textarea id="codeedit_01"></textarea>
+		<div id="console">
+		  <ul id="output"><li>test:</li></ul>
+		</div>
+
 		<div class="frwrap">
 			<button class="pure-button pure-button-primary" id="creatnew">新建</button>
 			<button class="pure-button pure-button-primary">同步</button>
@@ -59,7 +65,121 @@
 
 			$("#creatnew").on('click',function(){
 				console.log(1);
-			})
+			});
+
+			// function log(msg, className) {
+			//   var li = document.createElement('li'),
+			//       div = document.createElement('div');
+
+			//   div.innerHTML = typeof msg==='string' ? cleanse(msg): msg;
+			//   prettyPrint([div]);
+			//   li.className = className || 'log';
+			//   li.innerHTML = '<span class="gutter"></span>';
+			//   li.appendChild(div);
+
+			//   appendLog(li);
+			// }
+
+			// var output = document.getElementById('output'),
+			// 		logAfter = null;
+
+			// function cleanse(s) {
+			//   return (s||'').replace(/[<&]/g, function (m) { return {'&':'&amp;','<':'&lt;'}[m];});
+			// }
+
+			//  function appendLog(el, echo) {
+			//   if (echo) {
+			//     if (!output.firstChild) {
+			//       output.appendChild(el);
+			//     } else {
+			//       output.insertBefore(el, output.firstChild);
+			//     }      
+			//   } else {
+			//     // if (!output.lastChild) {
+			//     //   output.appendChild(el);
+			//     //   // console.log('ok');
+			//     // } else {
+			//       // console.log(output.lastChild.nextSibling);
+			//       output.insertBefore(el, logAfter ? logAfter : output.lastChild.nextSibling); //  ? output.lastChild.nextSibling : output.firstChild
+			//     // }
+			//   }
+			// }
+
+			// window._console = {
+			//   log: function () {
+			//     var l = arguments.length, i = 0;
+			//     for (; i < l; i++) {
+			//       log(stringify(arguments[i], true));
+			//     }
+			//   },
+			//   dir: function () {
+			//     var l = arguments.length, i = 0;
+			//     for (; i < l; i++) {
+			//       log(stringify(arguments[i]));
+			//     }
+			//   }
+			// };
+			function stringify(o, simple) {
+			  var json = '', i, type = ({}).toString.call(o), parts = [], names = [];
+			  
+			  if (type == '[object String]') {
+			    json = '"' + o.replace(/\n/g, '\\n').replace(/"/g, '\\"') + '"';
+			  } else if (type == '[object Array]') {
+			    json = '[';
+			    for (i = 0; i < o.length; i++) {
+			      parts.push(stringify(o[i], simple));
+			    }
+			    json += parts.join(', ') + ']';
+			    json;
+			  } else if (type == '[object Object]') {
+			    json = '{';
+			    for (i in o) {
+			      names.push(i);
+			    }
+			    names.sort(sortci);
+			    for (i = 0; i < names.length; i++) {
+			      parts.push(stringify(names[i]) + ': ' + stringify(o[names[i] ], simple));
+			    }
+			    json += parts.join(', ') + '}';
+			  } else if (type == '[object Number]') {
+			    json = o+'';
+			  } else if (type == '[object Boolean]') {
+			    json = o ? 'true' : 'false';
+			  } else if (type == '[object Function]') {
+			    json = o.toString();
+			  } else if (o === null) {
+			    json = 'null';
+			  } else if (o === undefined) {
+			    json = 'undefined';
+			  } else if (simple == undefined) {
+			    json = type + '{\n';
+			    for (i in o) {
+			      names.push(i);
+			    }
+			    names.sort(sortci);
+			    for (i = 0; i < names.length; i++) {
+			      parts.push(names[i] + ': ' + stringify(o[names[i]], true)); // safety from max stack
+			    }
+			    json += parts.join(',\n') + '\n}';
+			  } else {
+			    try {
+			      json = o+''; // should look like an object
+			    } catch (e) {}
+			  }
+			  return json;
+			}
+
+			console.oldLog = console.log;
+			console.log = function(value)
+			{
+			    console.oldLog(value);
+			    window.$log = value;
+			};
+
+			// Usage
+			console.log(function test(){ alert(1)});
+
+			alert(stringify($log))
 		</script>
 	</div>
 	<div id="footer">
