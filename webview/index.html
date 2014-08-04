@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+		<meta name="format-detection"content="telephone=no">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<title>WebView</title>
+		<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="../addon/console/console.min.js"></script>
+	</head>
+	<body>
+		<style type="text/css">
+			body,html{
+				width: 100%;
+				height: 100%;
+				position: relative;
+				margin: 0; padding: 0;
+			}
+			.view_iframe{
+				width: 100%; height: 100%;
+				position: absolute;
+				top: 0; bottom: 0;
+				z-index: -1;
+			}
+			.view_iframe iframe{
+				width: 100%; height: 100%;
+				position: absolute;
+				top: 0; bottom: 0;
+			}
+		</style>
+		<div class="view_iframe">
+			<iframe src="" frameborder="0"></iframe>
+		</div>
+		<pre class="console"></pre>
+        <textarea class="js_run"></textarea>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				var isok = 1;
+				var _test = "console.log('ok!+1')";
+				$('.js_run').val(_test);
+			    // init console js
+			    ConsoleJs.init({
+			        selector: "pre.console",
+			        input: "textarea.js_run"
+			    });
+			    $('.js_run').focus().on("keydown", function (e){
+			    	if (e.keyCode == 13) {
+			    		var log = $(".console > .log").html();
+			    		$(".console").html('');
+			    	};
+			    })
+			    // console.log("ok!");
+			});
+		</script>
+	</body>
+</html>
